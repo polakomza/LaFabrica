@@ -1,10 +1,7 @@
 package com.mycompany.lafabrica;
 import java.util.ArrayList;
 
-/**
- *
- * @author MegaTecnologia
- */
+
 public class Producto {
     public String nombre;
     public ArrayList <MateriaPrima>mat_primas = new ArrayList<>();
