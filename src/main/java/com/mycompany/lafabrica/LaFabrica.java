@@ -25,7 +25,9 @@ public class LaFabrica {
         // ingrese la cantidad del producto en gramos
         //  cantidad = 2000
         // minimo de cantidad permitido
-        // orden = new ordenProduccion(codigo, nombreProducto, cantidad)
+        OrdenProduccion orden = new OrdenProduccion(100, "papas clasicas", 2000);
+        OrdenProduccion orden2 = new OrdenProduccion(101, "papas en gajos", 3000);
+
 
         //ordenVeficada = orden.verificarOrden();
         // if(ordenVerificada){
@@ -36,7 +38,11 @@ public class LaFabrica {
         //  orden.producto.procesar_ordenes_pendientes()
         // }
 
-
+        orden.producto.verMateriaPrima();
+        System.out.println(orden.producto.crear_producto());
+        orden.producto.verMateriaPrima();
+        //System.out.println(orden2);
+        //orden.producto.verMateriaPrima();
 
     }
 }

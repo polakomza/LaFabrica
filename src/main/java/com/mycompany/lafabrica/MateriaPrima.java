@@ -53,10 +53,9 @@ public class MateriaPrima {
     
     @Override
     public String toString() {
-        return "MateriaPrima{" +
+        return "MateriaPrima: " +
                 "nombre='" + nombre + '\'' +
                 ", stock=" + stock +
-                ", unidadDeMedida='" + unidadDeMedida + '\'' +
-                '}';
+                ", unidadDeMedida='" + unidadDeMedida + '\'';
     }
 }

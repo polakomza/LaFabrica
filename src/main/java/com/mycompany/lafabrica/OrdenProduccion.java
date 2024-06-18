@@ -11,6 +11,11 @@ public class OrdenProduccion {
     private String producto_a_fabricar;
     private boolean cumplida;
     private int cantidad;
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
     public Producto producto;
     private int codigo;
 
@@ -18,14 +23,14 @@ public class OrdenProduccion {
         this.producto_a_fabricar = producto_a_fabricar;
         this.cantidad = cantidad;
         this.codigo = codigo;
-        this.producto = new Producto(producto_a_fabricar);
+        this.producto = new Producto(producto_a_fabricar,cantidad);
     }
 
     public OrdenProduccion(String producto_a_fabricar, boolean cumplida, int cantidad) {
         this.producto_a_fabricar = producto_a_fabricar;
         this.cumplida = cumplida;
         this.cantidad = cantidad;
-        this.producto = new Producto(producto_a_fabricar);
+        this.producto = new Producto(producto_a_fabricar, cantidad);
     }
 
 
