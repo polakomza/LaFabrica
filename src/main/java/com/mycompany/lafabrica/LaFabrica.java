@@ -3,11 +3,14 @@ package com.mycompany.lafabrica;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class LaFabrica {
-
+/*
+    nosotros vamos a vender en bolsas de 1kg o 1000 gramos
+    1200 gramos de papa para 
+    */
     static Scanner sc;
     public static void main(String[] args) {
         sc =  new Scanner(System.in);
-        System.out.println("Bienvenido a la fabrica de Papas");
+        System.out.println("Bienvenido a la fabrica de Papas congeladas");
         int cantALlevar = 0;
         int codigoAIngresar = 0;
         String nombreProducto = "";
@@ -24,30 +27,21 @@ public class LaFabrica {
                     salida = encargarOtraCosa(cantALlevar);
                     break;
                 case 101:
-                    nombreProducto = "Papas al horno";
+                    nombreProducto = "Gajos de papas";
                     cantALlevar = validarCantidad();
                     salida = encargarOtraCosa(cantALlevar);
                     break;
                 case 102:
-                    nombreProducto = "Papas en cubo";
+                    nombreProducto = "Papas al horno";
                     cantALlevar = validarCantidad();
                     salida = encargarOtraCosa(cantALlevar);
                     break;
                 case 103:
-                    nombreProducto = "Papas lays";
+                    nombreProducto = "Tater tots";//bola de papa
                     cantALlevar = validarCantidad();
                     salida = encargarOtraCosa(cantALlevar);
                     break;
-                case 104:
-                    nombreProducto = "Sorrentinos";
-                    cantALlevar = validarCantidad();
-                    salida = encargarOtraCosa(cantALlevar);
-                    break;
-                case 105:
-                    nombreProducto = "Capeletini";
-                    cantALlevar = validarCantidad();
-                    salida = encargarOtraCosa(cantALlevar);
-                    break;
+                
                 default:
                     System.out.println("Ingrese un codigo valido");
                     break;
@@ -103,12 +97,10 @@ public class LaFabrica {
 
         ArrayList<OrdenProduccion> mostrar = new ArrayList<>();
         // validar cantidad minima en la orden de produccion
-        mostrar.add(new OrdenProduccion(100, "Gnoquis", 20));
-        mostrar.add(new OrdenProduccion(101, "Fideos Rellenos", 30));
-        mostrar.add(new OrdenProduccion(102, "Spaghetti", 50));
-        mostrar.add(new OrdenProduccion(103, "Ravioles", 15));
-        mostrar.add(new OrdenProduccion(104, "Sorrentinos", 28));
-        mostrar.add(new OrdenProduccion(105, "Capeletini", 28));
+        mostrar.add(new OrdenProduccion(100, "Papas fritas", 20));
+        mostrar.add(new OrdenProduccion(101, "Gajos de papas", 30));
+        mostrar.add(new OrdenProduccion(102, "Papas al horno", 50));
+        mostrar.add(new OrdenProduccion(103, "Tater tots", 15));
         
         System.out.println("Codigo    Producto   ");
         System.out.println("---------------------");
