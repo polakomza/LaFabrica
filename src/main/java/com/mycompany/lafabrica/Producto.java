@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class Producto {
     public String nombre;
-    public ArrayList <MateriaPrima>mat_primas = new ArrayList<>();
+    public ArrayList <MateriaPrima>mat_primas = MateriaPrima.crearListaIngredientes();
 
     public Producto(String nombre) {
+
         this.nombre = nombre;
     }
     
@@ -19,7 +20,7 @@ public class Producto {
         return Producto.this;
     }
     
-    public static boolean crear_producto(String producto_a_fabricar, int cantidad){
+    public boolean crear_producto(){
         //formula de fabricacion
         //Debe guardarse en la base de datos
         return false;

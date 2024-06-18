@@ -1,10 +1,8 @@
 package com.mycompany.lafabrica;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class MateriaPrima {
-    private static Random random = new Random();
     private String nombre;
     private int stock;
     private String unidadDeMedida;
@@ -39,17 +37,17 @@ public class MateriaPrima {
         this.unidadDeMedida = unidadDeMedida;
     }
     
-    public static ArrayList<MateriaPrima> crearListaProductos() {
+    public static ArrayList<MateriaPrima> crearListaIngredientes() {
         ArrayList<MateriaPrima> ingredientes = new ArrayList<>();
-        ingredientes.add(new MateriaPrima("Harina", random.nextInt(50), "kg"));
-        ingredientes.add(new MateriaPrima("Huevos", random.nextInt(50), "unidades"));
-        ingredientes.add(new MateriaPrima("Aceite", random.nextInt(50), "litros"));
-        ingredientes.add(new MateriaPrima("Sal", random.nextInt(50), "kg"));
-        ingredientes.add(new MateriaPrima("Pollo", random.nextInt(50), "kg"));
-        ingredientes.add(new MateriaPrima("Ricota", random.nextInt(50), "kg"));
-        ingredientes.add(new MateriaPrima("Jamon y Queso", random.nextInt(50), "kg"));
-        ingredientes.add(new MateriaPrima("Carne", random.nextInt(50), "kg"));
-        ingredientes.add(new MateriaPrima("Papa", random.nextInt(50), "kg"));
+        ingredientes.add(new MateriaPrima("Harina", 10000, "gramos"));
+        ingredientes.add(new MateriaPrima("Huevos", 10000, "gramos"));
+        ingredientes.add(new MateriaPrima("Aceite", 10000, "gramos"));
+        ingredientes.add(new MateriaPrima("Sal", 10000, "gramos"));
+        ingredientes.add(new MateriaPrima("Pollo", 10000, "gramos"));
+        ingredientes.add(new MateriaPrima("Ricota", 10000, "gramos"));
+        ingredientes.add(new MateriaPrima("Jamon y Queso", 10000, "gramos"));
+        ingredientes.add(new MateriaPrima("Carne", 10000, "gramos"));
+        ingredientes.add(new MateriaPrima("Papa", 10000, "gramos"));
         return ingredientes;
     }
     
