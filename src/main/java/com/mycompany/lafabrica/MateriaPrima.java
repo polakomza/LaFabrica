@@ -39,15 +39,11 @@ public class MateriaPrima {
     
     public static ArrayList<MateriaPrima> crearListaIngredientes() {
         ArrayList<MateriaPrima> ingredientes = new ArrayList<>();
-        ingredientes.add(new MateriaPrima("Harina", 10000, "gramos"));
-        ingredientes.add(new MateriaPrima("Huevos", 10000, "gramos"));
-        ingredientes.add(new MateriaPrima("Aceite", 10000, "gramos"));
-        ingredientes.add(new MateriaPrima("Sal", 10000, "gramos"));
-        ingredientes.add(new MateriaPrima("Pollo", 10000, "gramos"));
-        ingredientes.add(new MateriaPrima("Ricota", 10000, "gramos"));
-        ingredientes.add(new MateriaPrima("Jamon y Queso", 10000, "gramos"));
-        ingredientes.add(new MateriaPrima("Carne", 10000, "gramos"));
-        ingredientes.add(new MateriaPrima("Papa", 10000, "gramos"));
+        ingredientes.add(new MateriaPrima("Papa", 10000, "gramos")); //1200 gramos para 1000 gramos de papa
+        ingredientes.add(new MateriaPrima("Aceite", 10000, "gramos"));//125 gramos
+        ingredientes.add(new MateriaPrima("Sal", 10000, "gramos"));//de 15 gramos
+        ingredientes.add(new MateriaPrima("Pirofosfato ácido de sodio", 1000, "gramos"));// 3 gramos
+        
         return ingredientes;
     }
     

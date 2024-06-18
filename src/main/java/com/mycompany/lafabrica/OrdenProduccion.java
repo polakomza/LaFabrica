@@ -8,16 +8,11 @@ determinado producto que hay
  que fabricar. */
 
 public class OrdenProduccion {
-    private String producto_a_fabricar;
+    public String producto_a_fabricar;
     private boolean cumplida;
-    private int cantidad;
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
+    public int cantidad;
     public Producto producto;
-    private int codigo;
+    public int codigo;
 
     public OrdenProduccion(int codigo, String producto_a_fabricar, int cantidad) {
         this.producto_a_fabricar = producto_a_fabricar;
@@ -32,18 +27,38 @@ public class OrdenProduccion {
         this.cantidad = cantidad;
         this.producto = new Producto(producto_a_fabricar, cantidad);
     }
-
-
-
+    
     public boolean verificarOrden(){
         //recibira por parametro lo que retorne de crear producto
         return producto.crear_producto();
     }
 
-    @Override
-    public String toString() {
-        return "OrdenProduccion: " +
-                "producto_a_fabricar=' " + producto_a_fabricar + '\'' +
-                ", codigo= " + codigo;
+    public String getProducto_a_fabricar() {
+        return producto_a_fabricar;
     }
+    public void setProducto_a_fabricar(String producto_a_fabricar) {
+        this.producto_a_fabricar = producto_a_fabricar;
+    }
+
+    public boolean isCumplida() {
+        return cumplida;
+    }
+    public void setCumplida(boolean cumplida) {
+        this.cumplida = cumplida;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+    
 }
