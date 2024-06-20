@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Producto {
     public String nombre;
     public int cantidad;
-    public ArrayList <MateriaPrima>mat_primas = MateriaPrima.crearListaIngredientes();
-
+    public ArrayList <MateriaPrima>mat_primas;
+    
     public Producto(String nombre, int cantidad) {
         this.nombre = nombre;
         this.cantidad = cantidad/1000;
@@ -29,7 +29,10 @@ public class Producto {
             System.out.println(i);
         }
     }
-    
+   /*public void setMateriasPrimas(ArrayList<MateriaPrima> matePri){
+        this.mat_primas = matePri;
+    }
+*/
     public boolean crearProducto(){
 
         // diferencia de stock tomando en cuenta el nombre del producto y la cantidad de produccion
@@ -54,13 +57,13 @@ public class Producto {
 
     public void modificarStockMateriaPrima(int papa, int aceite, int sal, int pads) {
         for (MateriaPrima matPri: mat_primas) {
-            if (matPri.getNombre() == "Papa"){
+            if ("Papa".equals(matPri.getNombre())){
                 matPri.setStock(matPri.getStock() - papa*cantidad);
-            } else if (matPri.getNombre() == "Aceite") {
+            } else if ("Aceite".equals(matPri.getNombre())) {
                 matPri.setStock(matPri.getStock() - aceite*cantidad);
-            } else if (matPri.getNombre() == "Sal") {
+            } else if ("Sal".equals(matPri.getNombre())) {
                     matPri.setStock(matPri.getStock()- sal*cantidad);
-            } else if (matPri.getNombre() == "Pirofosfato ácido de sodio") {
+            } else if ("Pirofosfato ácido de sodio".equals(matPri.getNombre())) {
                     matPri.setStock(matPri.getStock()-pads*cantidad);
             }else {
                 System.out.println("materia prima Inexistente");
