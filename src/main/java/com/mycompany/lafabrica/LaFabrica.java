@@ -9,50 +9,67 @@ public class LaFabrica {
     */
     static Scanner sc;
     public static void main(String[] args) {
-        //OrdenProduccion orden = new OrdenProduccion(100, "papas clasicas", 2000);
-        //OrdenProduccion orden2 = new OrdenProduccion(101, "papas en gajos", 3000);
-        //System.out.println(orden2.producto.crear_producto());
         sc =  new Scanner(System.in);
         System.out.println("Bienvenido a la fabrica de Papas congeladas");
         int cantALlevar = 0;
         int codigoAIngresar = 0;
         String nombreProducto = "";
         boolean salida = false;
+        OrdenProduccion orden = null;
         while(salida != true) {
             mostrarProductos();
-            System.out.println("Ingrese el código del producto a llevar");
+            System.out.println("Ingrese el código del producto a fabricar");
             codigoAIngresar = sc.nextInt();
             sc.nextLine();
             switch (codigoAIngresar) {
                 case 100:
                     nombreProducto = "Papas fritas";
                     cantALlevar = validarCantidad();
+                    orden = new OrdenProduccion(codigoAIngresar, nombreProducto, cantALlevar);
+                    nuevaOrden(orden);
                     salida = encargarOtraCosa(cantALlevar);
                     break;
                 case 101:
                     nombreProducto = "Gajos de papas";
                     cantALlevar = validarCantidad();
+                    orden = new OrdenProduccion(codigoAIngresar, nombreProducto, cantALlevar);
+                    nuevaOrden(orden);
                     salida = encargarOtraCosa(cantALlevar);
                     break;
                 case 102:
                     nombreProducto = "Papas al horno";
                     cantALlevar = validarCantidad();
+                    orden = new OrdenProduccion(codigoAIngresar, nombreProducto, cantALlevar);
+                    nuevaOrden(orden);
                     salida = encargarOtraCosa(cantALlevar);
                     break;
                 case 103:
                     nombreProducto = "Tater tots";//bola de papa
                     cantALlevar = validarCantidad();
+                    orden = new OrdenProduccion(codigoAIngresar, nombreProducto, cantALlevar);
+                    nuevaOrden(orden);
                     salida = encargarOtraCosa(cantALlevar);
                     break;
                 
                 default:
                     System.out.println("Ingrese un codigo valido");
                     break;
-                    
             }
-            System.out.println("Nombre " + nombreProducto + ", codigo " + codigoAIngresar + " y cantidad " + cantALlevar);
+            System.out.println(orden.producto.mat_primas.get(0).getStock());
         }
     }
+
+
+    //Crear nueva orden de produccion
+    public static void nuevaOrden(OrdenProduccion ordenProduccion){
+        if (ordenProduccion.verificarStock()){
+            ordenProduccion.producto.crearProducto();
+        }else {
+            ordenProduccion.producto.procesarOrdenesPendientes();
+        }
+    }
+
+
     //Validamos que se ingrese el minimo pedido de los gramos (1000)
     public static int validarCantidad(){
         int cantidadALlevar;
@@ -72,7 +89,7 @@ public class LaFabrica {
     public static boolean encargarOtraCosa(int cantALlevar){
         boolean quiereOno = false;
         sc.nextLine();
-        if(cantALlevar>1000){
+        if(cantALlevar>=1000){
             System.out.println("Desea comprar algo mas? Si o No");
             String salidaONo = sc.nextLine();
             quiereOno = !salidaONo.toLowerCase().equalsIgnoreCase("si");
