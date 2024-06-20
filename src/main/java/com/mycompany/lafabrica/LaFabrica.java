@@ -11,11 +11,11 @@ public class LaFabrica {
         ingredientes.add(new MateriaPrima("Aceite", 10000, "gramos"));//125 gramos
         ingredientes.add(new MateriaPrima("Sal", 10000, "gramos"));//de 15 gramos
         ingredientes.add(new MateriaPrima("Pirofosfato ácido de sodio", 1000, "gramos"));// 3 gramo
-        
-        
+            
+            
         sc = new Scanner(System.in);
         while(true){
-            System.out.println("Bienvenido a la fabrica de Papas congeladas");
+            System.out.println("Bienvenido a la fabrica de Papas congeladas\n");
             System.out.println("Ingrese: \n"
                         + " 1. Para mostrar menu \n"
                         + " 2. Para actualizar stock \n"
