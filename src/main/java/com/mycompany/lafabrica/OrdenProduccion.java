@@ -1,6 +1,5 @@
 package com.mycompany.lafabrica;
 
-import java.util.ArrayList;
 
 /*Las órdenes de producción indican
 la cantidad de unidades de un 
