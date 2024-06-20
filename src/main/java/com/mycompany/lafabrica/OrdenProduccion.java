@@ -28,9 +28,17 @@ public class OrdenProduccion {
         this.producto = new Producto(producto_a_fabricar, cantidad);
     }
     
-    public boolean verificarOrden(){
-        //recibira por parametro lo que retorne de crear producto
-        return producto.crear_producto();
+    public boolean verificarStock(){
+        for (MateriaPrima mP : producto.mat_primas) {
+            int disponibilidadStock = mP.getStock()-cantidad;
+            if ( disponibilidadStock<0) {
+                System.out.println("Tu orden esta pendiente: ");
+                System.out.println("Stock de "+mP.getNombre()+": "+disponibilidadStock);
+                return false;
+            }
+        }
+        System.out.println("Tu orden esta siendo procesada");
+        return true;
     }
 
     public String getProducto_a_fabricar() {
