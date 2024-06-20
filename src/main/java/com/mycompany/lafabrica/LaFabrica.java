@@ -3,20 +3,36 @@ package com.mycompany.lafabrica;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class LaFabrica {
-/*
-    nosotros vamos a vender en bolsas de 1kg o 1000 gramos
-    1200 gramos de papa para 
-    */
+    /*
+        nosotros vamos a vender en bolsas de 1kg o 1000 gramos
+        1200 gramos de papa para
+        */
     static Scanner sc;
+
     public static void main(String[] args) {
-        sc =  new Scanner(System.in);
+        sc = new Scanner(System.in);
         System.out.println("Bienvenido a la fabrica de Papas congeladas");
+        System.out.println("");
+        int opcion;
+
+        switch (opcion){
+            case 1:
+                mostrarMenu();
+                break;
+            case 2:
+
+                break;
+        }
+    }
+
+    public static void mostrarMenu(){
+
         int cantALlevar = 0;
         int codigoAIngresar = 0;
         String nombreProducto = "";
         boolean salida = false;
         OrdenProduccion orden = null;
-        while(salida != true) {
+        while (salida != true) {
             mostrarProductos();
             System.out.println("Ingrese el código del producto a fabricar");
             codigoAIngresar = sc.nextInt();
@@ -50,7 +66,7 @@ public class LaFabrica {
                     nuevaOrden(orden);
                     salida = encargarOtraCosa(cantALlevar);
                     break;
-                
+
                 default:
                     System.out.println("Ingrese un codigo valido");
                     break;
@@ -58,7 +74,6 @@ public class LaFabrica {
             System.out.println(orden.producto.mat_primas.get(0).getStock());
         }
     }
-
 
     //Crear nueva orden de produccion
     public static void nuevaOrden(OrdenProduccion ordenProduccion){
@@ -92,7 +107,7 @@ public class LaFabrica {
         if(cantALlevar>=1000){
             System.out.println("Desea comprar algo mas? Si o No");
             String salidaONo = sc.nextLine();
-            quiereOno = !salidaONo.toLowerCase().equalsIgnoreCase("si");
+            quiereOno = !salidaONo.equalsIgnoreCase("si");
         }
         return quiereOno;
     }
