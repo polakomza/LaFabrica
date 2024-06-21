@@ -1,6 +1,6 @@
-package com.mycompany.lafabrica;;
+package com.mycompany.lafabrica.modelos;
 
-class OrdenProduccion {
+public class OrdenProduccion {
     private Producto producto;
     private int cantidad;
     private boolean pendiente;

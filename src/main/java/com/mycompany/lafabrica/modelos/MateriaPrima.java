@@ -1,8 +1,8 @@
 
-package com.mycompany.lafabrica;
+package com.mycompany.lafabrica.modelos;
 
 
-class MateriaPrima {
+public class MateriaPrima {
     private String nombre;
     private int cantidad;
 

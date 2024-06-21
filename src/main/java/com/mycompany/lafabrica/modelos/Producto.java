@@ -1,9 +1,9 @@
 
-package com.mycompany.lafabrica;
+package com.mycompany.lafabrica.modelos;
 
 import java.util.HashMap;
 import java.util.Map;
-class Producto {
+public class Producto {
     private String nombre;
     private Map<MateriaPrima, Integer> formula;
 

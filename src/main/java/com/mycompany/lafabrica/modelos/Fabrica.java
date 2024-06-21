@@ -1,4 +1,4 @@
-package com.mycompany.lafabrica;
+package com.mycompany.lafabrica.modelos;
 
 import java.util.ArrayList;
 import java.util.List;

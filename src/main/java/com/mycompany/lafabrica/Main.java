@@ -1,6 +1,10 @@
 
 package com.mycompany.lafabrica;
 
+import com.mycompany.lafabrica.modelos.Fabrica;
+import com.mycompany.lafabrica.modelos.MateriaPrima;
+import com.mycompany.lafabrica.modelos.OrdenProduccion;
+import com.mycompany.lafabrica.modelos.Producto;
 import java.util.Map;
 import java.util.List;
 import java.util.Scanner;
