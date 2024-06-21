@@ -1,5 +1,5 @@
 
-package com.mycompany.pruebachatgpt;
+package com.mycompany.lafabrica;
 
 import java.util.Map;
 import java.util.List;
@@ -180,38 +180,3 @@ public class Main {
         }
     }
 }
-
-
-/*
-public class Main {
-    public static void main(String[] args) {
-        Fabrica fabrica = new Fabrica();
-
-        MateriaPrima mp1 = new MateriaPrima("Hierro", 1000);
-        MateriaPrima mp2 = new MateriaPrima("Carbon", 500);
-        fabrica.agregarMateriaPrima(mp1);
-        fabrica.agregarMateriaPrima(mp2);
-
-        Producto producto1 = new Producto("Acero");
-        producto1.agregarMateriaPrima(mp1, 2);
-        producto1.agregarMateriaPrima(mp2, 1);
-        fabrica.agregarProducto(producto1);
-
-        Producto producto2 = new Producto("Aleacion");
-        producto2.agregarMateriaPrima(mp1, 1);
-        producto2.agregarMateriaPrima(mp2, 2);
-        fabrica.agregarProducto(producto2);
-
-        OrdenProduccion orden1 = new OrdenProduccion(producto1, 100);
-        OrdenProduccion orden2 = new OrdenProduccion(producto2, 50);
-        fabrica.agregarOrdenProduccion(orden1);
-        fabrica.agregarOrdenProduccion(orden2);
-
-        fabrica.procesarOrdenesPendientes();
-
-        List<Producto> productosPorMP1 = fabrica.listarProductosPorMateriaPrima(mp1);
-        for (Producto producto : productosPorMP1) {
-            System.out.println(producto.getNombre());
-        }
-    }
-}*/

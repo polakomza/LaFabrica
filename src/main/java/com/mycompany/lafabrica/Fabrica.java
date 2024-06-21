@@ -1,8 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.pruebachatgpt;
+package com.mycompany.lafabrica;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,79 +85,3 @@ public class Fabrica {
         orden.setPendiente(false);
     }
 }
-
-
-/*
-public class Fabrica {
-    private List<MateriaPrima> materiasPrimas;
-    private List<Producto> productos;
-    private List<OrdenProduccion> ordenesPendientes;
-
-    public Fabrica() {
-        this.materiasPrimas = new ArrayList<>();
-        this.productos = new ArrayList<>();
-        this.ordenesPendientes = new ArrayList<>();
-    }
-
-    public void agregarMateriaPrima(MateriaPrima materiaPrima) {
-        materiasPrimas.add(materiaPrima);
-    }
-
-    public void agregarProducto(Producto producto) {
-        productos.add(producto);
-    }
-
-    public void agregarOrdenProduccion(OrdenProduccion orden) {
-        ordenesPendientes.add(orden);
-    }
-
-    public MateriaPrima buscarMateriaPrima(String nombre) {
-        for (MateriaPrima mp : materiasPrimas) {
-            if (mp.getNombre().equals(nombre)) {
-                return mp;
-            }
-        }
-        return null;
-    }
-
-    public void procesarOrdenesPendientes() {
-        List<OrdenProduccion> ordenesRealizadas = new ArrayList<>();
-        for (OrdenProduccion orden : ordenesPendientes) {
-            Producto producto = orden.getProducto();
-            boolean puedeRealizarse = true;
-
-            for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
-                MateriaPrima materiaPrima = entrada.getKey();
-                int cantidadNecesaria = entrada.getValue() * orden.getCantidad();
-                if (materiaPrima.getCantidad() < cantidadNecesaria) {
-                    puedeRealizarse = false;
-                    break;
-                }
-            }
-
-            if (puedeRealizarse) {
-                for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
-                    MateriaPrima materiaPrima = entrada.getKey();
-                    int cantidadNecesaria = entrada.getValue() * orden.getCantidad();
-                    materiaPrima.setCantidad(materiaPrima.getCantidad() - cantidadNecesaria);
-                }
-                orden.setPendiente(false);
-                ordenesRealizadas.add(orden);
-            }
-        }
-        ordenesPendientes.removeAll(ordenesRealizadas);
-    }
-
-    public List<Producto> listarProductosPorMateriaPrima(MateriaPrima materiaPrima) {
-        List<Producto> productosUtilizanMateriaPrima = new ArrayList<>();
-        for (Producto producto : productos) {
-            if (producto.getFormula().containsKey(materiaPrima)) {
-                productosUtilizanMateriaPrima.add(producto);
-            }
-        }
-        productosUtilizanMateriaPrima.sort((p1, p2) -> 
-            p2.getFormula().get(materiaPrima) - p1.getFormula().get(materiaPrima)
-        );
-        return productosUtilizanMateriaPrima;
-    }
-}*/

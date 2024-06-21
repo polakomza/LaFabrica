@@ -1,5 +1,5 @@
 
-package com.mycompany.pruebachatgpt;
+package com.mycompany.lafabrica;
 
 
 class MateriaPrima {
