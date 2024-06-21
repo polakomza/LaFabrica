@@ -5,15 +5,21 @@ import com.mycompany.lafabrica.modelos.Fabrica;
 import com.mycompany.lafabrica.modelos.MateriaPrima;
 import com.mycompany.lafabrica.modelos.OrdenProduccion;
 import com.mycompany.lafabrica.modelos.Producto;
+import com.mycompany.lafabrica.vistas.Vista;
 import java.util.Map;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class LaFabrica {
     public static void main(String[] args) {
         Fabrica fabrica = new Fabrica();
         Scanner scanner = new Scanner(System.in);
-
+        
+        //Vista
+        Vista view = new Vista();
+        view.setVisible(true);
+        view.setLocationRelativeTo(null);
+        
         // Crear materias primas (componentes de la PC)
         MateriaPrima procesador = new MateriaPrima("Procesador", 100);
         MateriaPrima memoriaRAM = new MateriaPrima("Memoria RAM", 200);
