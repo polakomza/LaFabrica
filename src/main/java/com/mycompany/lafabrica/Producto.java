@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Producto {
     public String nombre;
     public int cantidad;
-    public ArrayList <MateriaPrima>mat_primas;
+    public ArrayList <MateriaPrima>mat_primas = new ArrayList<>();
     
     public Producto(String nombre, int cantidad) {
         this.nombre = nombre;
