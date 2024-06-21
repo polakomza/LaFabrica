@@ -1,46 +1,30 @@
-package com.mycompany.lafabrica;
 
-public class MateriaPrima {
+package com.mycompany.pruebachatgpt;
+
+
+class MateriaPrima {
     private String nombre;
-    private int stock;
-    private String unidadDeMedida;
+    private int cantidad;
 
-    public MateriaPrima(String nombre, int stock, String unidadDeMedida) {
+    public MateriaPrima(String nombre, int cantidad) {
         this.nombre = nombre;
-        this.stock = stock;
-        this.unidadDeMedida = unidadDeMedida;
+        this.cantidad = cantidad;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public int getStock() {
-        return stock;
+    public int getCantidad() {
+        return cantidad;
     }
 
-    public String getUnidadDeMedida() {
-        return unidadDeMedida;
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public void setUnidadDeMedida(String unidadDeMedida) {
-        this.unidadDeMedida = unidadDeMedida;
-    }
-    
-    
     @Override
     public String toString() {
-        return "MateriaPrima: " +
-                "nombre='" + nombre + '\'' +
-                ", stock=" + stock +
-                ", unidadDeMedida='" + unidadDeMedida + '\'';
+        return nombre + ": " + cantidad;
     }
 }

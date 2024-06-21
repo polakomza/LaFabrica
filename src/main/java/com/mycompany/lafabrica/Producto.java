@@ -1,74 +1,31 @@
-package com.mycompany.lafabrica;
-import java.util.ArrayList;
 
+package com.mycompany.pruebachatgpt;
 
-public class Producto {
-    public String nombre;
-    public int cantidad;
-    public ArrayList <MateriaPrima>mat_primas = new ArrayList<>();
-    
-    public Producto(String nombre, int cantidad) {
+import java.util.HashMap;
+import java.util.Map;
+class Producto {
+    private String nombre;
+    private Map<MateriaPrima, Integer> formula;
+
+    public Producto(String nombre) {
         this.nombre = nombre;
-        this.cantidad = cantidad/1000;
-    }
-    
-    public void procesarOrdenesPendientes(){
-        //Procesar las ordenes sin completar
-        System.out.println("no hay suficiente stock de la materia prima {papas} para la cantidad ingresada");
-        System.out.println("ingrese el stock de la materia prima");
-        //scanner actualizar stock
-    }
-    
-    public Producto cantidadProductos(ArrayList<MateriaPrima>mat_primas){
-        //Consultar a la base de datos para las materias primas mas utilizadas
-        return Producto.this;
+        this.formula = new HashMap<>();
     }
 
-    public void verMateriaPrima() {
-        for (MateriaPrima i : mat_primas){
-            System.out.println(i);
-        }
-    }
-   /*public void setMateriasPrimas(ArrayList<MateriaPrima> matePri){
-        this.mat_primas = matePri;
-    }
-*/
-    public boolean crearProducto(){
-
-        // diferencia de stock tomando en cuenta el nombre del producto y la cantidad de produccion
-        if (nombre == "Papas fritas") {
-            modificarStockMateriaPrima(1200,125,15,3);
-            return true;
-        } else if (nombre == "Gajos de papas") {
-            modificarStockMateriaPrima(1000,38, 5,3);
-            return true;
-        } else if (nombre == "Papas al horno") {
-            modificarStockMateriaPrima(1200, 50, 10, 3);
-            return true;
-        } else if (nombre == "Tater tots") {
-            modificarStockMateriaPrima(850, 35, 7,3);
-            return true;
-        }else {
-            System.out.println("Producto inexistente");
-            return false;
-        }
-        //Debe guardarse en la base de datos
+    public String getNombre() {
+        return nombre;
     }
 
-    public void modificarStockMateriaPrima(int papa, int aceite, int sal, int pads) {
-        for (MateriaPrima matPri: mat_primas) {
-            if ("Papa".equals(matPri.getNombre())){
-                matPri.setStock(matPri.getStock() - papa*cantidad);
-            } else if ("Aceite".equals(matPri.getNombre())) {
-                matPri.setStock(matPri.getStock() - aceite*cantidad);
-            } else if ("Sal".equals(matPri.getNombre())) {
-                    matPri.setStock(matPri.getStock()- sal*cantidad);
-            } else if ("Pirofosfato ácido de sodio".equals(matPri.getNombre())) {
-                    matPri.setStock(matPri.getStock()-pads*cantidad);
-            }else {
-                System.out.println("materia prima Inexistente");
-            }
-        }
-        System.out.println("Se actualizo el stock de la materia prima del producto: " + nombre);
+    public Map<MateriaPrima, Integer> getFormula() {
+        return formula;
+    }
+
+    public void agregarMateriaPrima(MateriaPrima materiaPrima, int cantidad) {
+        formula.put(materiaPrima, cantidad);
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 }
