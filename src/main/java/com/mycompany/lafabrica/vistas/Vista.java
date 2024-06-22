@@ -1,23 +1,29 @@
 package com.mycompany.lafabrica.vistas;
 
-import com.mycompany.lafabrica.modelos.Fabrica;
-import com.mycompany.lafabrica.modelos.OrdenProduccion;
-import com.mycompany.lafabrica.modelos.Producto;
-import com.mycompany.lafabrica.modelos.MateriaPrima;
+import com.mycompany.lafabrica.modelos.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Vista extends javax.swing.JFrame {
 
-    private Fabrica fabrica;
+    private final Fabrica fabrica;
+    private Connection connection; // Conexión a la base de datos
 
     public Vista(Fabrica fabrica) {
         this.fabrica = fabrica;
         initComponents();
         setupListeners();
+        try {
+            connection = ConexionBD.getConnection(); // Obtener conexión a la base de datos
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos.");
+            e.printStackTrace();
+        }
     }
 
     private void setupListeners() {
@@ -40,16 +46,16 @@ public class Vista extends javax.swing.JFrame {
         int opcion = jMenuDesple.getSelectedIndex();
         switch (opcion) {
             case 0:
-                mostrarStock();
+                mostrarStockBD();
                 break;
             case 1:
-                fabricarProducto();
+                fabricarProductoBD();
                 break;
             case 2:
-                procesarOrdenesPendientes();
+                procesarOrdenesPendientesBD();
                 break;
             case 3:
-                actualizarStock();
+                actualizarStockBD();
                 break;
             default:
                 JOptionPane.showMessageDialog(this, "Opción no válida. Intente nuevamente.");
@@ -57,122 +63,147 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
-    private void mostrarStock() {
-        StringBuilder sb = new StringBuilder("Stock actual de materias primas:\n");
-        for (MateriaPrima mp : fabrica.getMateriasPrimas()) {
-            sb.append(mp).append("\n");
-        }
-        JOptionPane.showMessageDialog(this, sb.toString());
-    }
-
-    private void fabricarProducto() {
-        List<Producto> productos = fabrica.getProductos();
-        String[] opciones = productos.stream().map(Producto::getNombre).toArray(String[]::new);
-        String seleccion = (String) JOptionPane.showInputDialog(this, "Seleccione el producto a fabricar:", "Fabricar producto", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
-
-        if (seleccion != null) {
-            Producto productoSeleccionado = productos.stream().filter(p -> p.getNombre().equals(seleccion)).findFirst().orElse(null);
-            if (productoSeleccionado != null) {
-                String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a fabricar:");
-                int cantidad;
-                try {
-                    cantidad = Integer.parseInt(cantidadStr);
-                    if (cantidad < 0) {
-                        throw new NumberFormatException("Cantidad no válida.");
-                    }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Cantidad no válida.");
-                    return;
-                }
-
-                OrdenProduccion orden = new OrdenProduccion(productoSeleccionado, cantidad);
-                if (fabrica.puedeRealizarse(orden)) {
-                    fabrica.realizarOrden(orden);
-                    JOptionPane.showMessageDialog(this, "Orden realizada y stock actualizado.");
-                } else {
-                    fabrica.agregarOrdenProduccion(orden);
-                    JOptionPane.showMessageDialog(this, "Orden agregada como pendiente por falta de stock.");
-                }
-            }
-        }
-    }
-
-    private void procesarOrdenesPendientes() {
-    if (fabrica.getOrdenesPendientes().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No hay órdenes pendientes para procesar.");
-    } else {
-        boolean todasProcesadas = true;
-        for (OrdenProduccion orden : fabrica.getOrdenesPendientes()) {
-            if (!fabrica.puedeRealizarse(orden)) {
-                todasProcesadas = false;
-                break;
-            }
-        }
-
-        if (todasProcesadas) {
-            fabrica.procesarOrdenesPendientes();
-            JOptionPane.showMessageDialog(this, "Órdenes pendientes procesadas.");
-        } else {
-            JOptionPane.showMessageDialog(this, "No hay suficiente stock para procesar la orden pendiente.");
-        }
-    }
-}
-
-    private void actualizarStock() {
-    List<MateriaPrima> materiasPrimas = fabrica.getMateriasPrimas();
-    String[] opciones = new String[materiasPrimas.size() + 1]; // Una opción adicional para actualizar todas
-    for (int i = 0; i < materiasPrimas.size(); i++) {
-        opciones[i] = materiasPrimas.get(i).getNombre();
-    }
-    opciones[materiasPrimas.size()] = "Actualizar todas las materias primas";
-
-    String seleccion = (String) JOptionPane.showInputDialog(this,
-            "Seleccione la materia prima a actualizar o 'Actualizar todas las materias primas':",
-            "Actualizar stock", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
-
-    if (seleccion != null) {
-        if (seleccion.equals("Actualizar todas las materias primas")) {
-            actualizarStockDeTodasLasMateriasPrimas();
-        } else {
-            MateriaPrima materiaPrimaSeleccionada = materiasPrimas.stream()
-                    .filter(mp -> mp.getNombre().equals(seleccion)).findFirst().orElse(null);
-            if (materiaPrimaSeleccionada != null) {
-                String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a agregar:");
-                int cantidad;
-                try {
-                    cantidad = Integer.parseInt(cantidadStr);
-                    if (cantidad < 0) {
-                        throw new NumberFormatException("Cantidad no válida.");
-                    }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Cantidad no válida.");
-                    return;
-                }
-
-                fabrica.actualizarStock(materiaPrimaSeleccionada.getNombre(), cantidad);
-                JOptionPane.showMessageDialog(this, "Stock actualizado para " + materiaPrimaSeleccionada.getNombre() + ".");
-                }
-            }
-        }
-    }
-
-    private void actualizarStockDeTodasLasMateriasPrimas() {
-        String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a agregar a cada materia prima:");
-        int cantidad;
+    private void actualizarStockBD() {
         try {
-            cantidad = Integer.parseInt(cantidadStr);
-            if (cantidad < 0) {
-                throw new NumberFormatException("Cantidad no válida.");
+            List<MateriaPrima> materiasPrimas = MateriaPrima.obtenerTodas(connection);
+            String[] opciones = new String[materiasPrimas.size() + 1]; // Una opción adicional para actualizar todas
+            for (int i = 0; i < materiasPrimas.size(); i++) {
+                opciones[i] = materiasPrimas.get(i).getNombre();
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Cantidad no válida.");
-            return;
-        }
+            opciones[materiasPrimas.size()] = "Actualizar todas las materias primas";
 
-        for (MateriaPrima mp : fabrica.getMateriasPrimas()) {
-            fabrica.actualizarStock(mp.getNombre(), cantidad);
+            String seleccion = (String) JOptionPane.showInputDialog(this,
+                    "Seleccione la materia prima a actualizar o 'Actualizar todas las materias primas':",
+                    "Actualizar stock", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+
+            if (seleccion != null) {
+                if (seleccion.equals("Actualizar todas las materias primas")) {
+                    String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a agregar a cada materia prima:");
+                    int cantidad;
+                    try {
+                        cantidad = Integer.parseInt(cantidadStr);
+                        if (cantidad < 0) {
+                            throw new NumberFormatException("Cantidad no válida.");
+                        }
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(this, "Cantidad no válida.");
+                        return;
+                    }
+
+                    for (MateriaPrima mp : materiasPrimas) {
+                        Fabrica.actualizarStockEnBD(connection, mp.getNombre(), cantidad);
+                    }
+                    JOptionPane.showMessageDialog(this, "Stock actualizado para todas las materias primas.");
+                } else {
+                    MateriaPrima materiaPrimaSeleccionada = materiasPrimas.stream()
+                            .filter(mp -> mp.getNombre().equals(seleccion)).findFirst().orElse(null);
+                    if (materiaPrimaSeleccionada != null) {
+                        String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a agregar:");
+                        int cantidad;
+                        try {
+                            cantidad = Integer.parseInt(cantidadStr);
+                            if (cantidad < 0) {
+                                throw new NumberFormatException("Cantidad no válida.");
+                            }
+                        } catch (NumberFormatException e) {
+                            JOptionPane.showMessageDialog(this, "Cantidad no válida.");
+                            return;
+                        }
+
+                        Fabrica.actualizarStockEnBD(connection, materiaPrimaSeleccionada.getNombre(), cantidad);
+                        JOptionPane.showMessageDialog(this, "Stock actualizado para " + materiaPrimaSeleccionada.getNombre() + ".");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar el stock desde la base de datos.");
+            e.printStackTrace();
         }
-        JOptionPane.showMessageDialog(this, "Stock actualizado para todas las materias primas.");
+    }
+
+    private void procesarOrdenesPendientesBD() {
+        try {
+            if (Fabrica.getOrdenesPendientesEnBD(connection).isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay órdenes pendientes para procesar.");
+            } else {
+                boolean todasProcesadas = true;
+                for (OrdenProduccion orden : Fabrica.getOrdenesPendientesEnBD(connection)) {
+                    if (!Fabrica.puedeRealizarseEnBD(connection, orden)) {
+                        todasProcesadas = false;
+                        break;
+                    }
+                }
+
+                if (todasProcesadas) {
+                    Fabrica.procesarOrdenesPendientesBD(connection);
+                    JOptionPane.showMessageDialog(this, "Órdenes pendientes procesadas.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No hay suficiente stock para procesar la orden pendiente.");
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al procesar las órdenes pendientes desde la base de datos.");
+            e.printStackTrace();
+        }
+    }
+
+    private void mostrarStockBD() {
+        // Implementa la lógica para obtener y mostrar el stock desde la base de datos
+        // Ejemplo:
+        try {
+            connection = ConexionBD.getConnection();
+            List<MateriaPrima> materiasPrimas = MateriaPrima.obtenerTodas(connection);
+            StringBuilder sb = new StringBuilder("Stock actual de materias primas:\n");
+            for (MateriaPrima mp : materiasPrimas) {
+                sb.append(mp).append("\n");
+            }
+            JOptionPane.showMessageDialog(this, sb.toString());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al obtener el stock desde la base de datos.");
+            e.printStackTrace();
+        }
+    }
+
+    private void fabricarProductoBD() {
+        // Implementa la lógica para fabricar un producto usando la base de datos
+        // Ejemplo:
+        List<Producto> productos;
+
+        try {
+            connection = ConexionBD.getConnection();
+            productos = Producto.obtenerTodos(connection);
+            String[] opciones = productos.stream().map(Producto::getNombre).toArray(String[]::new);
+            String seleccion = (String) JOptionPane.showInputDialog(this, "Seleccione el producto a fabricar:", "Fabricar producto", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+
+            if (seleccion != null) {
+                Producto productoSeleccionado = productos.stream().filter(p -> p.getNombre().equals(seleccion)).findFirst().orElse(null);
+                if (productoSeleccionado != null) {
+                    String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a fabricar:");
+                    int cantidad;
+                    try {
+                        cantidad = Integer.parseInt(cantidadStr);
+                        if (cantidad < 0) {
+                            throw new NumberFormatException("Cantidad no válida.");
+                        }
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(this, "Cantidad no válida.");
+                        return;
+                    }
+
+                    OrdenProduccion orden = new OrdenProduccion(productoSeleccionado, cantidad);
+                    if (Fabrica.puedeRealizarseEnBD(connection, orden)) {
+                        Fabrica.realizarOrdenEnBD(connection, orden);
+                        JOptionPane.showMessageDialog(this, "Orden realizada y stock actualizado.");
+                    } else {
+                        Fabrica.agregarOrdenProduccionEnBD(connection, orden);
+                        JOptionPane.showMessageDialog(this, "Orden agregada como pendiente por falta de stock.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al obtener los productos desde la base de datos.");
+            e.printStackTrace();
+        }
     }
 
     private void jBotonSalirActionPerformed(ActionEvent evt) {
