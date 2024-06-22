@@ -14,7 +14,7 @@ public class Fabrica {
         productos = new ArrayList<>();
         ordenesPendientes = new ArrayList<>();
     }
-
+    
     public void agregarMateriaPrima(MateriaPrima materiaPrima) {
         materiasPrimas.add(materiaPrima);
     }
@@ -34,6 +34,10 @@ public class Fabrica {
     public List<Producto> getProductos() {
         return productos;
     }
+    
+    public List<OrdenProduccion> getOrdenesPendientes() {
+        return ordenesPendientes;
+    }
 
     public void actualizarStock(String nombre, int cantidad) {
         for (MateriaPrima mp : materiasPrimas) {
@@ -42,7 +46,6 @@ public class Fabrica {
                 return;
             }
         }
-        System.out.println("Materia prima no encontrada.");
     }
 
     public void procesarOrdenesPendientes() {
@@ -54,7 +57,6 @@ public class Fabrica {
                 if (puedeRealizarse(orden)) {
                     realizarOrden(orden);
                     ordenesCompletadas.add(orden);
-                    System.out.println("Orden procesada");
                 } else {
                     System.out.println("No hay suficiente stock para procesar la orden pendiente");
                 }
@@ -63,7 +65,7 @@ public class Fabrica {
         ordenesPendientes.removeAll(ordenesCompletadas);
     }
 
-    private boolean puedeRealizarse(OrdenProduccion orden) {
+    public boolean puedeRealizarse(OrdenProduccion orden) {
         Producto producto = orden.getProducto();
         for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
             MateriaPrima materiaPrima = entrada.getKey();
@@ -75,7 +77,7 @@ public class Fabrica {
         return true;
     }
 
-    private void realizarOrden(OrdenProduccion orden) {
+    public void realizarOrden(OrdenProduccion orden) {
         Producto producto = orden.getProducto();
         for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
             MateriaPrima materiaPrima = entrada.getKey();
