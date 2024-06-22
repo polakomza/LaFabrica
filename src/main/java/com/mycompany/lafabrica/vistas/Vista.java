@@ -119,12 +119,23 @@ public class Vista extends javax.swing.JFrame {
 }
 
     private void actualizarStock() {
-        List<MateriaPrima> materiasPrimas = fabrica.getMateriasPrimas();
-        String[] opciones = materiasPrimas.stream().map(MateriaPrima::getNombre).toArray(String[]::new);
-        String seleccion = (String) JOptionPane.showInputDialog(this, "Seleccione la materia prima a actualizar:", "Actualizar stock", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+    List<MateriaPrima> materiasPrimas = fabrica.getMateriasPrimas();
+    String[] opciones = new String[materiasPrimas.size() + 1]; // Una opción adicional para actualizar todas
+    for (int i = 0; i < materiasPrimas.size(); i++) {
+        opciones[i] = materiasPrimas.get(i).getNombre();
+    }
+    opciones[materiasPrimas.size()] = "Actualizar todas las materias primas";
 
-        if (seleccion != null) {
-            MateriaPrima materiaPrimaSeleccionada = materiasPrimas.stream().filter(mp -> mp.getNombre().equals(seleccion)).findFirst().orElse(null);
+    String seleccion = (String) JOptionPane.showInputDialog(this,
+            "Seleccione la materia prima a actualizar o 'Actualizar todas las materias primas':",
+            "Actualizar stock", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+
+    if (seleccion != null) {
+        if (seleccion.equals("Actualizar todas las materias primas")) {
+            actualizarStockDeTodasLasMateriasPrimas();
+        } else {
+            MateriaPrima materiaPrimaSeleccionada = materiasPrimas.stream()
+                    .filter(mp -> mp.getNombre().equals(seleccion)).findFirst().orElse(null);
             if (materiaPrimaSeleccionada != null) {
                 String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a agregar:");
                 int cantidad;
@@ -139,9 +150,29 @@ public class Vista extends javax.swing.JFrame {
                 }
 
                 fabrica.actualizarStock(materiaPrimaSeleccionada.getNombre(), cantidad);
-                JOptionPane.showMessageDialog(this, "Stock actualizado.");
+                JOptionPane.showMessageDialog(this, "Stock actualizado para " + materiaPrimaSeleccionada.getNombre() + ".");
+                }
             }
         }
+    }
+
+    private void actualizarStockDeTodasLasMateriasPrimas() {
+        String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a agregar a cada materia prima:");
+        int cantidad;
+        try {
+            cantidad = Integer.parseInt(cantidadStr);
+            if (cantidad < 0) {
+                throw new NumberFormatException("Cantidad no válida.");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Cantidad no válida.");
+            return;
+        }
+
+        for (MateriaPrima mp : fabrica.getMateriasPrimas()) {
+            fabrica.actualizarStock(mp.getNombre(), cantidad);
+        }
+        JOptionPane.showMessageDialog(this, "Stock actualizado para todas las materias primas.");
     }
 
     private void jBotonSalirActionPerformed(ActionEvent evt) {
