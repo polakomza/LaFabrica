@@ -1,12 +1,15 @@
 package com.mycompany.lafabrica.vistas;
 
+import com.mycompany.lafabrica.controladores.*;
 import com.mycompany.lafabrica.modelos.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class Vista extends javax.swing.JFrame {
@@ -57,6 +60,9 @@ public class Vista extends javax.swing.JFrame {
             case 3:
                 actualizarStockBD();
                 break;
+            case 4:
+                mostrarMateriaPrimaMasUsadaBD();
+                break;
             default:
                 JOptionPane.showMessageDialog(this, "Opción no válida. Intente nuevamente.");
                 break;
@@ -86,7 +92,7 @@ public class Vista extends javax.swing.JFrame {
                             throw new NumberFormatException("Cantidad no válida.");
                         }
                     } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(this, "Cantidad no válida.");
+                        JOptionPane.showMessageDialog(this, "Ingrese un numero positivo");
                         return;
                     }
 
@@ -106,7 +112,7 @@ public class Vista extends javax.swing.JFrame {
                                 throw new NumberFormatException("Cantidad no válida.");
                             }
                         } catch (NumberFormatException e) {
-                            JOptionPane.showMessageDialog(this, "Cantidad no válida.");
+                            JOptionPane.showMessageDialog(this, "Ingrese un numero positivo");
                             return;
                         }
 
@@ -206,6 +212,39 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
+    private void mostrarMateriaPrimaMasUsadaBD() {
+        try {
+            String query =
+                    "SELECT mp.nombre, SUM(op.cantidad * pm.cantidad) AS total_usado " +
+                            "FROM OrdenProduccion op " +
+                            "JOIN ProductoMateriaPrima pm ON op.producto = pm.producto " +
+                            "JOIN MateriaPrima mp ON pm.materiaPrima = mp.nombre " +
+                            "GROUP BY mp.nombre " +
+                            "ORDER BY total_usado DESC";
+
+            StringBuilder sb = new StringBuilder("Materia Prima más usada:\n");
+
+            try (Statement stmt = connection.createStatement();
+                 ResultSet rs = stmt.executeQuery(query)) {
+                while (rs.next()) {
+                    String nombre = rs.getString("nombre");
+                    int totalUsado = rs.getInt("total_usado");
+                    sb.append(nombre).append(": ").append(totalUsado).append("\n");
+                }
+            }
+
+            if (sb.length() == "Materia Prima más usada:\n".length()) {
+                JOptionPane.showMessageDialog(this, "No se encontraron datos de uso de materias primas.");
+            } else {
+                JOptionPane.showMessageDialog(this, sb.toString());
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al obtener el uso de materias primas desde la base de datos.");
+            e.printStackTrace();
+        }
+    }
+
+
     private void jBotonSalirActionPerformed(ActionEvent evt) {
         System.exit(0);
     }
@@ -234,7 +273,7 @@ public class Vista extends javax.swing.JFrame {
 
         jLabel2.setText("Elija una opcion:");
 
-        jMenuDesple.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar stock actual", "Fabricar producto", "Procesar ordenes pendientes", "Actualizar stock" }));
+        jMenuDesple.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar stock actual", "Fabricar producto", "Procesar ordenes pendientes", "Actualizar stock", "Materia prima más usada" }));
         jMenuDesple.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuDespleActionPerformed(evt);
