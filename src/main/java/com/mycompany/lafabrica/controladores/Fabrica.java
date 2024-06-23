@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 
 public class Fabrica {
     private List<MateriaPrima> materiasPrimas;
@@ -107,19 +108,45 @@ public class Fabrica {
         }
         return getOrdenesPendientes();
     }
+    public static boolean puedeRealizarseEnBD(Connection connection, OrdenProduccion orden) throws SQLException {
+        Producto producto = orden.getProducto();
+        List<String> mensajesFaltantes = new ArrayList<>();
 
-    public static boolean  puedeRealizarseEnBD(Connection connection, OrdenProduccion orden) throws SQLException {
+        for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
+            MateriaPrima materiaPrima = entrada.getKey();
+            int cantidadNecesaria = entrada.getValue() * orden.getCantidad();
+            int cantidadActual = obtenerCantidadMateriaPrimaEnBD(connection, materiaPrima.getNombre());
+
+            if (cantidadActual < cantidadNecesaria) {
+                mensajesFaltantes.add(
+                    "Materia prima: " + materiaPrima.getNombre() + "\n" +
+                    "Stock actual: " + cantidadActual + " Unidades\n" +
+                    "Cantidad necesaria: " + cantidadNecesaria + " Unidades"
+                );
+            }
+ }
+
+    if (!mensajesFaltantes.isEmpty()) {
+        String mensajeCompleto = String.join("\n\n", mensajesFaltantes);
+        JOptionPane.showMessageDialog(null, mensajeCompleto);
+        return false;
+    }
+
+    return true;
+}
+   /* public static boolean  puedeRealizarseEnBD(Connection connection, OrdenProduccion orden) throws SQLException {
         Producto producto = orden.getProducto();
         for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
             MateriaPrima materiaPrima = entrada.getKey();
             int cantidadNecesaria = entrada.getValue() * orden.getCantidad();
+            
             if (obtenerCantidadMateriaPrimaEnBD(connection, materiaPrima.getNombre()) < cantidadNecesaria) {
-                System.out.println(obtenerCantidadMateriaPrimaEnBD(connection, materiaPrima.getNombre())+ " can: "+ cantidadNecesaria);
+                JOptionPane.showMessageDialog(null, "Materia prima: "+materiaPrima.getNombre()+"\n" +"Stock actual: " + obtenerCantidadMateriaPrimaEnBD(connection, materiaPrima.getNombre()) +" Unidades\n"+ "Cantidad necesaria: " + cantidadNecesaria + " Unidades");
                 return false;
             }
         }
         return true;
-    }
+    }*/
     private static int obtenerCantidadMateriaPrimaEnBD(Connection connection, String nombreMateriaPrima) throws SQLException {
         String sql = "SELECT cantidad FROM materiaprima WHERE nombre = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
