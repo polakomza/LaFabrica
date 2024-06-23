@@ -1,5 +1,8 @@
-package com.mycompany.lafabrica.modelos;
+package com.mycompany.lafabrica.controladores;
 
+import com.mycompany.lafabrica.modelos.MateriaPrima;
+import com.mycompany.lafabrica.modelos.OrdenProduccion;
+import com.mycompany.lafabrica.modelos.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

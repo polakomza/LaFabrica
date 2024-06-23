@@ -1,9 +1,6 @@
 package com.mycompany.lafabrica;
 
-import com.mycompany.lafabrica.modelos.Fabrica;
-import com.mycompany.lafabrica.modelos.MateriaPrima;
-import com.mycompany.lafabrica.modelos.OrdenProduccion;
-import com.mycompany.lafabrica.modelos.Producto;
+import com.mycompany.lafabrica.controladores.Fabrica;
 import com.mycompany.lafabrica.vistas.Vista;
 
 import javax.swing.SwingUtilities;

@@ -1,5 +1,6 @@
 package com.mycompany.lafabrica.vistas;
 
+import com.mycompany.lafabrica.controladores.*;
 import com.mycompany.lafabrica.modelos.*;
 
 import javax.swing.*;
@@ -86,7 +87,7 @@ public class Vista extends javax.swing.JFrame {
                             throw new NumberFormatException("Cantidad no válida.");
                         }
                     } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(this, "Cantidad no válida.");
+                        JOptionPane.showMessageDialog(this, "Ingrese un numero positivo");
                         return;
                     }
 
@@ -106,7 +107,7 @@ public class Vista extends javax.swing.JFrame {
                                 throw new NumberFormatException("Cantidad no válida.");
                             }
                         } catch (NumberFormatException e) {
-                            JOptionPane.showMessageDialog(this, "Cantidad no válida.");
+                            JOptionPane.showMessageDialog(this, "Ingrese un numero positivo");
                             return;
                         }
 
