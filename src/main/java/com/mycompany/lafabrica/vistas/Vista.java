@@ -29,6 +29,7 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
+    // Configuro los listeners para los botones de la interfaz
     private void setupListeners() {
         jBotonEnviar.addActionListener(new ActionListener() {
             @Override
@@ -45,6 +46,7 @@ public class Vista extends javax.swing.JFrame {
         });
     }
 
+    // Manejo las acciones cuando se presiona el botón "Enviar"
     private void jBotonEnviarActionPerformed(ActionEvent evt) {
         int opcion = jMenuDesple.getSelectedIndex();
         switch (opcion) {
@@ -69,6 +71,7 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
+    // Actualizo el stock de las materias primas en la base de datos
     private void actualizarStockBD() {
         try {
             List<MateriaPrima> materiasPrimas = MateriaPrima.obtenerTodas(connection);
@@ -127,6 +130,7 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
+    // Proceso las órdenes de producción pendientes en la base de datos
     private void procesarOrdenesPendientesBD() {
         try {
             if (Fabrica.getOrdenesPendientesEnBD(connection).isEmpty()) {
@@ -153,9 +157,8 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
+    // Muestro el stock actual de materias primas desde la base de datos
     private void mostrarStockBD() {
-        // Implementa la lógica para obtener y mostrar el stock desde la base de datos
-        // Ejemplo:
         try {
             connection = ConexionBD.getConnection();
             List<MateriaPrima> materiasPrimas = MateriaPrima.obtenerTodas(connection);
@@ -170,9 +173,8 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
+    // Manejo la fabricación de productos utilizando la base de datos
     private void fabricarProductoBD() {
-        // Implementa la lógica para fabricar un producto usando la base de datos
-        // Ejemplo:
         List<Producto> productos;
 
         try {
@@ -212,15 +214,16 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
+    // Muestro la materia prima más usada en la producción desde la base de datos
     private void mostrarMateriaPrimaMasUsadaBD() {
         try {
             String query =
                     "SELECT mp.nombre, SUM(op.cantidad * pm.cantidad) AS total_usado " +
-                            "FROM OrdenProduccion op " +
-                            "JOIN ProductoMateriaPrima pm ON op.producto = pm.producto " +
-                            "JOIN MateriaPrima mp ON pm.materiaPrima = mp.nombre " +
-                            "GROUP BY mp.nombre " +
-                            "ORDER BY total_usado DESC";
+                    "FROM OrdenProduccion op " +
+                    "JOIN ProductoMateriaPrima pm ON op.producto = pm.producto " +
+                    "JOIN MateriaPrima mp ON pm.materiaPrima = mp.nombre " +
+                    "GROUP BY mp.nombre " +
+                    "ORDER BY total_usado DESC";
 
             StringBuilder sb = new StringBuilder("Materia Prima más usada:\n");
 
@@ -244,10 +247,12 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
-
+    // Cierro la aplicación cuando se presiona el botón "Salir"
     private void jBotonSalirActionPerformed(ActionEvent evt) {
         System.exit(0);
     }
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

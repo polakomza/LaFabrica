@@ -49,7 +49,7 @@ public class OrdenProduccion {
         this.pendiente = pendiente;
     }
 
-    // Método estático para actualizar el estado de una OrdenProduccion por ID
+    // Método que actualiza el estado de una OrdenProduccion por ID
     public static boolean actualizarEstado(int id, boolean pendiente, Connection connection) {
         boolean actualizado = false;
         String query = "UPDATE OrdenProduccion SET pendiente = ? WHERE id = ?";
@@ -69,7 +69,7 @@ public class OrdenProduccion {
         return actualizado;
     }
 
-    // Método estático para buscar una OrdenProduccion por ID
+    // Método que busca una OrdenProduccion por ID
     public static OrdenProduccion buscarPorId(int id, Connection connection) {
         OrdenProduccion orden = null;
         String query = "SELECT * FROM OrdenProduccion WHERE id = ?";
@@ -90,7 +90,7 @@ public class OrdenProduccion {
 
         return orden;
     }
-    // Método estático para obtener todas las órdenes de producción
+    // Método que obtiene todas las órdenes de producción
     public static List<OrdenProduccion> obtenerTodas(Connection connection) {
         List<OrdenProduccion> ordenes = new ArrayList<>();
         String query = "SELECT * FROM OrdenProduccion";

@@ -9,7 +9,7 @@ public class LaFabrica {
     public static void main(String[] args) {
         Fabrica fabrica = new Fabrica();
 
-        // Ejecutar la interfaz gráfica en el hilo de eventos de Swing
+        // Ejecuta la interfaz gráfica en el hilo de eventos de Swing
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

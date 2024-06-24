@@ -23,31 +23,37 @@ public class Fabrica {
         ordenesPendientes = new ArrayList<>();
     }
     
+    // Agrego una materia prima a la lista de materias primas
     public void agregarMateriaPrima(MateriaPrima materiaPrima) {
         materiasPrimas.add(materiaPrima);
     }
 
+    // Agrego un producto a la lista de productos
     public void agregarProducto(Producto producto) {
         productos.add(producto);
     }
 
+    // Agrego una orden de producción pendiente a la lista de órdenes pendientes
     public static void agregarOrdenProduccionPendiente(OrdenProduccion orden) {
         ordenesPendientes.add(orden);
     }
 
+    // Obtengo la lista de materias primas
     public List<MateriaPrima> getMateriasPrimas() {
         return materiasPrimas;
     }
 
+    // Obtengo la lista de productos
     public List<Producto> getProductos() {
         return productos;
     }
     
+    // Obtengo la lista de órdenes de producción pendientes
     public static List<OrdenProduccion> getOrdenesPendientes() {
         return ordenesPendientes;
     }
 
-
+    // Proceso las órdenes de producción pendientes desde la base de datos
     public static void procesarOrdenesPendientesBD(Connection connection) {
         List<OrdenProduccion> ordenesCompletadas = new ArrayList<>();
 
@@ -76,10 +82,11 @@ public class Fabrica {
             }
         }
 
-        // Eliminar las órdenes completadas de la lista de órdenes pendientes
+        // Elimino las órdenes completadas de la lista de órdenes pendientes
         ordenesPendientes.removeAll(ordenesCompletadas);
     }
 
+    // Agrego una orden de producción a la base de datos
     public static void agregarOrdenProduccionEnBD(Connection connection, OrdenProduccion orden) throws SQLException {
         String sql = "INSERT INTO ordenproduccion (producto, cantidad, pendiente) VALUES (?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -89,6 +96,8 @@ public class Fabrica {
             pstmt.executeUpdate();
         }
     }
+
+    // Obtengo las órdenes de producción pendientes desde la base de datos
     public static List<OrdenProduccion> getOrdenesPendientesEnBD(Connection connection) throws SQLException {
         String sql = "SELECT * FROM ordenproduccion WHERE pendiente = true";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -99,7 +108,7 @@ public class Fabrica {
                 int cantidad = rs.getInt("cantidad");
                 boolean pendiente = rs.getBoolean("pendiente");
 
-                // Obtener el producto asociado a partir de su ID
+                // Obtengo el producto asociado a partir de su nombre
                 Producto producto = Producto.buscarPorNombre(nombre, connection);
 
                 OrdenProduccion orden = new OrdenProduccion(id, producto, cantidad, pendiente);
@@ -108,6 +117,8 @@ public class Fabrica {
         }
         return getOrdenesPendientes();
     }
+
+    // Verifico si una orden de producción se puede realizar en la base de datos
     public static boolean puedeRealizarseEnBD(Connection connection, OrdenProduccion orden) throws SQLException {
         Producto producto = orden.getProducto();
         List<String> mensajesFaltantes = new ArrayList<>();
@@ -124,29 +135,16 @@ public class Fabrica {
                     "Cantidad necesaria: " + cantidadNecesaria + " Unidades"
                 );
             }
- }
-
-    if (!mensajesFaltantes.isEmpty()) {
-        String mensajeCompleto = String.join("\n\n", mensajesFaltantes);
-        JOptionPane.showMessageDialog(null, mensajeCompleto);
-        return false;
-    }
-
-    return true;
-}
-   /* public static boolean  puedeRealizarseEnBD(Connection connection, OrdenProduccion orden) throws SQLException {
-        Producto producto = orden.getProducto();
-        for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
-            MateriaPrima materiaPrima = entrada.getKey();
-            int cantidadNecesaria = entrada.getValue() * orden.getCantidad();
-            
-            if (obtenerCantidadMateriaPrimaEnBD(connection, materiaPrima.getNombre()) < cantidadNecesaria) {
-                JOptionPane.showMessageDialog(null, "Materia prima: "+materiaPrima.getNombre()+"\n" +"Stock actual: " + obtenerCantidadMateriaPrimaEnBD(connection, materiaPrima.getNombre()) +" Unidades\n"+ "Cantidad necesaria: " + cantidadNecesaria + " Unidades");
-                return false;
-            }
+        }
+        if (!mensajesFaltantes.isEmpty()) {
+            String mensajeCompleto = String.join("\n\n", mensajesFaltantes);
+            JOptionPane.showMessageDialog(null, mensajeCompleto);
+            return false;
         }
         return true;
-    }*/
+    }
+
+    // Obtengo la cantidad de una materia prima desde la base de datos
     private static int obtenerCantidadMateriaPrimaEnBD(Connection connection, String nombreMateriaPrima) throws SQLException {
         String sql = "SELECT cantidad FROM materiaprima WHERE nombre = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -159,6 +157,7 @@ public class Fabrica {
         }
     }
 
+    // Realizo una orden de producción en la base de datos
     public static void realizarOrdenEnBD(Connection connection, OrdenProduccion orden) throws SQLException {
         Producto producto = orden.getProducto();
         for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
@@ -172,6 +171,8 @@ public class Fabrica {
             pstmt.executeUpdate();
         }
     }
+
+    // Actualizo el stock de una materia prima en la base de datos
     public static void actualizarStockEnBD(Connection connection, String nombreMateriaPrima, int cantidad) throws SQLException {
         String sql = "UPDATE materiaprima SET cantidad = cantidad + ? WHERE nombre = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

@@ -30,7 +30,7 @@ public class Producto {
         formula.put(materiaPrima, cantidad);
     }
 
-    // Método estático para buscar un Producto por nombre
+    // Método que busca un Producto por nombre
     public static Producto buscarPorNombre(String nombre, Connection connection) {
         Producto producto = null;
         String query = "SELECT * FROM Producto WHERE nombre = ?";
@@ -51,7 +51,7 @@ public class Producto {
         return producto;
     }
 
-    // Método privado para cargar la fórmula de un producto
+    // Método que carga la fórmula de un producto
     private static void cargarFormula(Producto producto, Connection connection) {
         String query = "SELECT materiaPrima, cantidad FROM ProductoMateriaPrima WHERE producto = ?";
 
@@ -72,7 +72,7 @@ public class Producto {
         }
     }
 
-    // Método estático para obtener todos los productos
+    // Método que obtiene todos los productos
     public static List<Producto> obtenerTodos(Connection connection) {
         List<Producto> productos = new ArrayList<>();
         String query = "SELECT * FROM Producto";

@@ -43,7 +43,7 @@ public class MateriaPrima {
 
     public void setUnidadMedida(String unidadMedida){ this.unidadMedida = unidadMedida;}
 
-    // Método para buscar una MateriaPrima por nombre
+    // Método que busca una MateriaPrima por nombre
     public static MateriaPrima buscarPorNombre(String nombre, Connection connection) {
         MateriaPrima materiaPrima = null;
         String query = "SELECT * FROM MateriaPrima WHERE nombre = ?";
@@ -64,7 +64,7 @@ public class MateriaPrima {
         return materiaPrima;
     }
 
-    // Método estático para obtener todas las materias primas
+    // Método que obtiene todas las materias primas
     public static List<MateriaPrima> obtenerTodas(Connection connection) {
         List<MateriaPrima> materiasPrimas = new ArrayList<>();
         String query = "SELECT * FROM MateriaPrima";
