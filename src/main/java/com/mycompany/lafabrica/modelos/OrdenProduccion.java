@@ -13,10 +13,10 @@ public class OrdenProduccion {
     private int cantidad;
     private boolean pendiente;
 
-    public OrdenProduccion(Producto producto, int cantidad) {
+    public OrdenProduccion(Producto producto, int cantidad, boolean pendiente) {
         this.producto = producto;
         this.cantidad = cantidad;
-        this.pendiente = true;
+        this.pendiente = pendiente;
     }
     public OrdenProduccion(int id, Producto producto, int cantidad, boolean pendiente) {
         this.id = id;

@@ -88,14 +88,15 @@ public class Fabrica {
 
     // Agrego una orden de producción a la base de datos
     public static void agregarOrdenProduccionEnBD(Connection connection, OrdenProduccion orden) throws SQLException {
-        String sql = "INSERT INTO ordenproduccion (producto, cantidad, pendiente) VALUES (?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, orden.getProducto().getNombre());
-            pstmt.setInt(2, orden.getCantidad());
-            pstmt.setBoolean(3, orden.getPendiente());
-            pstmt.executeUpdate();
-        }
+    String sql = "INSERT INTO ordenproduccion (producto, cantidad, pendiente) VALUES (?, ?, ?)";
+    
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        pstmt.setString(1, orden.getProducto().getNombre());
+        pstmt.setInt(2, orden.getCantidad());
+        pstmt.setBoolean(3, !orden.getPendiente());
+        pstmt.executeUpdate();
     }
+}
 
     // Obtengo las órdenes de producción pendientes desde la base de datos
     public static List<OrdenProduccion> getOrdenesPendientesEnBD(Connection connection) throws SQLException {
@@ -160,15 +161,43 @@ public class Fabrica {
     // Realizo una orden de producción en la base de datos
     public static void realizarOrdenEnBD(Connection connection, OrdenProduccion orden) throws SQLException {
         Producto producto = orden.getProducto();
-        for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
-            MateriaPrima materiaPrima = entrada.getKey();
-            int cantidadNecesaria = entrada.getValue() * orden.getCantidad();
-            actualizarStockEnBD(connection, materiaPrima.getNombre(), -cantidadNecesaria);
-        }
-        String sql = "UPDATE ordenproduccion SET pendiente = false WHERE id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, orden.getId());
-            pstmt.executeUpdate();
+
+        try {
+            connection.setAutoCommit(false);  // Iniciar transacción
+
+            // Actualizar stock de materias primas
+            for (Map.Entry<MateriaPrima, Integer> entrada : producto.getFormula().entrySet()) {
+                MateriaPrima materiaPrima = entrada.getKey();
+                int cantidadNecesaria = entrada.getValue() * orden.getCantidad();
+                actualizarStockEnBD(connection, materiaPrima.getNombre(), -cantidadNecesaria);
+            }
+
+            // Verificar si la orden es pendiente
+            if (orden.getPendiente()) {
+                // Actualizar la orden de producción existente
+                String sqlUpdate = "UPDATE ordenproduccion SET pendiente = false WHERE id = ?";
+                try (PreparedStatement pstmtUpdate = connection.prepareStatement(sqlUpdate)) {
+                    pstmtUpdate.setInt(1, orden.getId());
+                    pstmtUpdate.executeUpdate();
+                }
+            } else {
+                // Insertar nueva orden de producción
+                String sqlInsert = "INSERT INTO ordenproduccion (producto, cantidad, pendiente) VALUES (?, ?, ?)";
+                try (PreparedStatement pstmtInsert = connection.prepareStatement(sqlInsert)) {
+                    pstmtInsert.setString(1, orden.getProducto().getNombre());
+                    pstmtInsert.setInt(2, orden.getCantidad());
+                    pstmtInsert.setBoolean(3, false);  // La orden no está pendiente
+                    pstmtInsert.executeUpdate();
+                }
+            }
+
+            connection.commit();  // Confirmar transacción
+            connection.setAutoCommit(true);  // Restaurar modo auto-commit
+
+        } catch (SQLException e) {
+            connection.rollback();  // Revertir transacción en caso de error
+            e.printStackTrace();
+            throw e;
         }
     }
 

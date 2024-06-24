@@ -175,44 +175,46 @@ public class Vista extends javax.swing.JFrame {
 
     // Manejo la fabricación de productos utilizando la base de datos
     private void fabricarProductoBD() {
-        List<Producto> productos;
+    List<Producto> productos;
 
-        try {
-            connection = ConexionBD.getConnection();
-            productos = Producto.obtenerTodos(connection);
-            String[] opciones = productos.stream().map(Producto::getNombre).toArray(String[]::new);
-            String seleccion = (String) JOptionPane.showInputDialog(this, "Seleccione el producto a fabricar:", "Fabricar producto", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+    try {
+        connection = ConexionBD.getConnection();
+        productos = Producto.obtenerTodos(connection);
+        String[] opciones = productos.stream().map(Producto::getNombre).toArray(String[]::new);
+        String seleccion = (String) JOptionPane.showInputDialog(this, 
+                    "Seleccione el producto a fabricar:", "Fabricar producto", 
+                JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
 
-            if (seleccion != null) {
-                Producto productoSeleccionado = productos.stream().filter(p -> p.getNombre().equals(seleccion)).findFirst().orElse(null);
-                if (productoSeleccionado != null) {
-                    String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a fabricar:");
-                    int cantidad;
-                    try {
-                        cantidad = Integer.parseInt(cantidadStr);
-                        if (cantidad < 0) {
-                            throw new NumberFormatException("Cantidad no válida.");
-                        }
-                    } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(this, "Cantidad no válida.");
-                        return;
+        if (seleccion != null) {
+            Producto productoSeleccionado = productos.stream().filter(p -> 
+            p.getNombre().equals(seleccion)).findFirst().orElse(null);
+            if (productoSeleccionado != null) {
+                String cantidadStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad a fabricar:");
+                int cantidad;
+                try {
+                    cantidad = Integer.parseInt(cantidadStr);
+                    if (cantidad < 0) {
+                        throw new NumberFormatException("Cantidad no válida.");
                     }
-
-                    OrdenProduccion orden = new OrdenProduccion(productoSeleccionado, cantidad);
-                    if (Fabrica.puedeRealizarseEnBD(connection, orden)) {
-                        Fabrica.realizarOrdenEnBD(connection, orden);
-                        JOptionPane.showMessageDialog(this, "Orden realizada y stock actualizado.");
-                    } else {
-                        Fabrica.agregarOrdenProduccionEnBD(connection, orden);
-                        JOptionPane.showMessageDialog(this, "Orden agregada como pendiente por falta de stock.");
-                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Cantidad no válida.");
+                    return;
+                }
+                OrdenProduccion orden = new OrdenProduccion(productoSeleccionado, cantidad, false);
+                if (Fabrica.puedeRealizarseEnBD(connection, orden)) {
+                    Fabrica.realizarOrdenEnBD(connection, orden);
+                    JOptionPane.showMessageDialog(this, "Orden realizada y stock actualizado.");
+                } else {
+                    Fabrica.agregarOrdenProduccionEnBD(connection, orden);
+                    JOptionPane.showMessageDialog(this, "Orden agregada como pendiente por falta de stock.");
                 }
             }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al obtener los productos desde la base de datos.");
-            e.printStackTrace();
         }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al obtener los productos desde la base de datos.");
+        e.printStackTrace();
     }
+}
 
     // Muestro la materia prima más usada en la producción desde la base de datos
     private void mostrarMateriaPrimaMasUsadaBD() {
